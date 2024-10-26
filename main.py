@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel, PositiveInt, Field
 from sqlalchemy import Column
+import numpy
 def print_hi(name):
     print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
 
