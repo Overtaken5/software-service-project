@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
 def print_hi(name):
     print(f'Hi, {name}')
 
