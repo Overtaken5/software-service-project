@@ -1,12 +1,22 @@
-from fastapi import FastAPI
-from pydantic import BaseModel, PositiveInt, Field
-from sqlalchemy import Column
-import numpy
-def print_hi(name):
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from pathlib import Path
 
-if __name__ == '__main__':
-    print_hi('PyCharm')
+SQLALCHEMY_DATABASE_URL = "postgresql://postgres:sanji@127.0.0.1/service_db"
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
+Base.metadata.create_all(bind=engine)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
-#это тестовый файл
+# создание сессии для БД
+SessionLocal = sessionmaker(autoflush=False, bind=engine)
+
+# Функция для получения сессии
+def get_db():
+    db = SessionLocal()  # создаём экземпляр сессии
+    try:
+        yield db  # возвращаем сессию для использования
+    finally:
+        db.close()  # закрываем сессию, чтобы освободить ресурсы
+
+my_app = FastAPI()
+feedback_list = []
+user_creation: list[UserCreate] = []
