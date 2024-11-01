@@ -4,9 +4,34 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9acc09e7-28e1-4970-8882-f20fca205604" name="Changes" comment="Изменён файл main.py">
+    <list default="true" id="9acc09e7-28e1-4970-8882-f20fca205604" name="Changes" comment="-">
+      <change afterPath="$PROJECT_DIR$/app/api.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/frontend/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/models/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/models/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/product quantity forecast/3.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/product quantity forecast/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/product quantity forecast/quantity_forecast.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/test/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/test/test_pg_basetest.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datasets/1.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datasets/2.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datasets/3.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datasets/4.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datasets/5.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datasets/6.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datasets/7.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datasets/Sales.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datasets/data_source.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datasets/name to id map.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/ServiceProject.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ServiceProject.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pg_connection.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/db.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proba.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/test/proba.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_proba.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/test/test_proba.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,12 +72,13 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Python tests.Python tests in test_pg.py.executor": "Run",
+    "Python tests.Python tests in test_pg_basetest.py (1).executor": "Run",
     "Python tests.Python tests in test_pg_basetest.py.executor": "Run",
     "Python tests.Python tests in test_proba.py.executor": "Run",
     "Python.pg_connection.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "project/back-end",
+    "git-widget-placeholder": "Merging project/back-end",
     "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
   }
 }]]></component>
@@ -79,7 +105,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests in pg_connection.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests in C:/Users/Андрей/PycharmProjects/software-service-project/pg_connection.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="ServiceProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -94,22 +120,7 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests in test_pg_basetest.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="ServiceProject" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/test_pg_basetest.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Python tests in test_proba.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests in C:/Users/Андрей/PycharmProjects/software-service-project/test_proba.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="ServiceProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -124,12 +135,33 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="Python tests in test_pg_basetest.py" type="tests" factoryName="Autodetect" temporary="true">
+      <module name="ServiceProject" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/app/test" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/app/test/test_pg_basetest.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.pg_connection" />
+      <item itemvalue="Python tests.Python tests in C:/Users/Андрей/PycharmProjects/software-service-project/pg_connection.py" />
+      <item itemvalue="Python tests.Python tests in C:/Users/Андрей/PycharmProjects/software-service-project/test_proba.py" />
+      <item itemvalue="Python tests.Python tests in test_pg_basetest.py" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python tests.Python tests in test_pg_basetest.py" />
         <item itemvalue="Python.pg_connection" />
-        <item itemvalue="Python tests.Python tests in pg_connection.py" />
-        <item itemvalue="Python tests.Python tests in test_proba.py" />
+        <item itemvalue="Python tests.Python tests in C:/Users/Андрей/PycharmProjects/software-service-project/pg_connection.py" />
+        <item itemvalue="Python tests.Python tests in C:/Users/Андрей/PycharmProjects/software-service-project/test_proba.py" />
       </list>
     </recent_temporary>
   </component>
@@ -221,7 +253,23 @@
       <option name="project" value="LOCAL" />
       <updated>1729967949888</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="-">
+      <option name="closed" value="true" />
+      <created>1730481057646</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1730481057646</updated>
+    </task>
+    <task id="LOCAL-00011" summary="-">
+      <option name="closed" value="true" />
+      <created>1730481068470</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1730481068470</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -230,6 +278,7 @@
     <MESSAGE value="Тест подключения к БД" />
     <MESSAGE value="Изменён файл" />
     <MESSAGE value="Изменён файл main.py" />
-    <option name="LAST_COMMIT_MESSAGE" value="Изменён файл main.py" />
+    <MESSAGE value="-" />
+    <option name="LAST_COMMIT_MESSAGE" value="-" />
   </component>
 </project>
