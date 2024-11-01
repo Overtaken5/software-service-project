@@ -1,3 +1,4 @@
+# Это тестовый файл, миграцию БД допишем в отдельном
 import psycopg2
 conn_params = {
     "host": "localhost",
