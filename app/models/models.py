@@ -10,5 +10,5 @@ class Person(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String)
-    password = Column(String)
+    hashed_password = Column(String)
     token = Column(String)
