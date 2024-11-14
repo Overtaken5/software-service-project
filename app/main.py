@@ -123,3 +123,7 @@ async def  give_products_amount():
 
 async def give_forecast():
     pass
+
+@app.get("/order_info")
+async def give_order_info():
+    pass
