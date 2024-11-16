@@ -127,3 +127,7 @@ async def give_forecast():
 @app.get("/order_info")
 async def give_order_info():
     pass
+
+@app.get("/order_info")
+async def give_order_info():
+    pass
