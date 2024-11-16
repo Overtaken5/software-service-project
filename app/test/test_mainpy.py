@@ -18,7 +18,7 @@ SQLALCHEMY_DATABASE_URL = "postgresql://postgres:123456@localhost:5432/service_d
 
 
 # Настройка тестовой базы данных
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # Создаем таблицы в тестовой БД
