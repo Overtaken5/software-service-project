@@ -14,7 +14,7 @@ import app.main
 from app.main import app, get_db
 
 # SQLALCHEMY_DATABASE_URL для тестирования
-SQLALCHEMY_DATABASE_URL = "postgresql://postgres:123456@localhost:5432/service_db"
+SQLALCHEMY_DATABASE_URL = "postgresql://postgres:sanji@127.0.0.1/service_db"
 
 
 # Настройка тестовой базы данных
