@@ -21,7 +21,7 @@ def test_insert_order_with_foreign_keys(db_connection):
 
     # Вставляем пользователя
     cur.execute("""
-        INSERT INTO public."Users" (username, password, token)
+        INSERT INTO public."Users" (username, hashed_password, token)
         VALUES ('testuser', 'password123', 'token123') RETURNING id
     """)
     user_id = cur.fetchone()[0]
@@ -61,7 +61,7 @@ def test_insert_orderproduct_with_foreign_keys(db_connection):
 
     # Вставляем пользователя
     cur.execute("""
-        INSERT INTO public."Users" (username, password, token)
+        INSERT INTO public."Users" (username, hashed_password, token)
         VALUES ('testuser2', 'password123', 'token123') RETURNING id
     """)
     user_id = cur.fetchone()[0]

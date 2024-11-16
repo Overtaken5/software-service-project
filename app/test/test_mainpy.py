@@ -14,7 +14,8 @@ import app.main
 from app.main import app, get_db
 
 # SQLALCHEMY_DATABASE_URL для тестирования
-SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"  # SQLite для тестирования
+SQLALCHEMY_DATABASE_URL = "postgresql://postgres:123456@localhost:5432/service_db"
+
 
 # Настройка тестовой базы данных
 engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
