@@ -7,11 +7,15 @@ from fastapi.responses import FileResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials, OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from pathlib import Path
+
+from numpy.ma.core import append
 from passlib.context import CryptContext
 from datetime import timedelta, timezone, datetime
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.sql.functions import current_user
+
 from app.models.models import Base, Person
 
 SQLALCHEMY_DATABASE_URL = "postgresql://postgres:sanji@127.0.0.1/service_db"
@@ -22,6 +26,7 @@ Base.metadata.create_all(bind=engine)
 SessionLocal = sessionmaker(autoflush=False, bind=engine)
 security = HTTPBasic()
 
+
 # Функция для получения сессии
 def get_db():
     db = SessionLocal()  # создаём экземпляр сессии
@@ -30,10 +35,12 @@ def get_db():
     finally:
         db.close()  # закрываем сессию, чтобы освободить ресурсы
 
+
 app = FastAPI()
 SECRET_KEY = "mugiwaraluffy"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 15
+
 
 @app.get("/")
 async def root():
@@ -44,7 +51,12 @@ async def root():
 @app.post("/registration")
 async def register(username: str = Form(), user_password: str = Form(), db: Session = Depends(get_db)):
     hashed_password = get_password_hash(user_password)  # Хэшируем пароль
-    new_user = Person(username=username, hashed_password=hashed_password, token=str(random.randint(10000, 99999)) + "z")
+    if username == "kuleshovd":
+        role = "admin"
+    else:
+        role = "guest"
+    new_user = Person(username=username, hashed_password=hashed_password,
+                      token=str(random.randint(10000, 99999)) + "z", role=role)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
@@ -54,19 +66,23 @@ async def register(username: str = Form(), user_password: str = Form(), db: Sess
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+
 # функция для сравнения обычного пароля с хэшированным
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
+
 # принимает пароль и возвращает захэшированное значение
 def get_password_hash(password):
     return pwd_context.hash(password)
+
 
 def get_user(username: str, db: Session = Depends(get_db)):
     user = db.query(Person).filter(Person.username == username).first()
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return user
+
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
@@ -87,6 +103,8 @@ def authenticate_user(db, username: str, password: str):
         return False
     return user
 
+
+# рут генерации токена по имени пользователя
 @app.post("/login")
 async def login_for_access_token(db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()):
     username = form_data.username
@@ -98,6 +116,8 @@ async def login_for_access_token(db: Session = Depends(get_db), form_data: OAuth
     access_token = create_access_token(data={"sub": username})
     return {"access_token": access_token, "token_type": "bearer"}
 
+
+# проверка аутентификации пользователя
 @app.get("/protected_resource")
 async def protected_resource(token: str = Depends(oauth2_scheme)):
     try:
@@ -110,24 +130,41 @@ async def protected_resource(token: str = Depends(oauth2_scheme)):
     except jwt.DecodeError:
         raise HTTPException(status_code=401, detail="Invalid token", headers={"WWW-Authenticate": "Basic"})
 
-    return {"message": "Access granted to protected resource"}
+    return {"message": "Access granted to protected resource", "user": username}
+    # return username
+
+# роль админа
+@app.get("/admin/")
+async def get_admin_info(current_user: str = Depends(protected_resource), db: Session = Depends(get_db)):
+    username = current_user["user"]
+    user = get_user(username, db)
+
+    if user.role != "admin":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized")
+    return {"message": f"Welcome admin {user.username}"}
+
+# роль пользователя/гостя
+@app.get("/guest/")
+async def get_guest_info(current_user: str = Depends(protected_resource), db: Session = Depends(get_db)):
+    username = current_user["user"]
+    user = get_user(username, db)
+
+    if user.role != "guest":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized")
+    return {"message": f"Hello guest {user, username}"}
+
 
 # прогноз продуктов
 @app.post("/products_forecast")
 async def check_products_amount():
     pass
+
+
 # выдача количества продукта и прогноза
 @app.get("/products_amount")
-async def  give_products_amount():
+async def give_products_amount():
     pass
+
 
 async def give_forecast():
-    pass
-
-@app.get("/order_info")
-async def give_order_info():
-    pass
-
-@app.get("/order_info")
-async def give_order_info():
     pass

@@ -12,3 +12,4 @@ class Person(Base):
     username = Column(String)
     hashed_password = Column(String)
     token = Column(String)
+    role = Column(String)
