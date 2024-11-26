@@ -151,7 +151,7 @@ async def get_guest_info(current_user: str = Depends(protected_resource), db: Se
 
     if user.role != "guest":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized")
-    return {"message": f"Hello guest {user, username}"}
+    return {"message": f"Hello guest {user.username}"}
 
 
 # прогноз продуктов
