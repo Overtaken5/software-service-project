@@ -1,10 +1,11 @@
 import random
 import jwt
 
-from fastapi import FastAPI, Form, Depends, status, HTTPException
+from fastapi import FastAPI, Form, status, HTTPException, Request
 from fastapi.params import Depends
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials, OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.templating import Jinja2Templates
 
 from pathlib import Path
 
@@ -15,6 +16,7 @@ from datetime import timedelta, timezone, datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.sql.functions import current_user, func
+from websockets.legacy.server import HTTPResponse
 
 from app.models.models import Base, Users, Product
 
@@ -44,7 +46,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 15
 
 @app.get("/")
 async def root():
-    file_path = Path("app/frontend/products_list.html")
+    file_path = Path("app/frontend/index.html")
     return FileResponse(file_path)
 
 
@@ -162,20 +164,41 @@ async def check_products_amount():
     pass
 
 
+async def give_forecast():
+    pass
+
+
+templates = Jinja2Templates(directory="app/frontend")
+
+@app.get("/products_amount", response_class=HTMLResponse)
+async def show_products_page(request: Request):
+    return templates.TemplateResponse("products_list.html", {"request": request})
+
+
 # выдача количества продукта и прогноза
-@app.post("/products_amount")
-async def give_products_amount(product_name: str = Form(), db: Session = Depends(get_db)):
+@app.post("/products_amount", response_class=HTMLResponse)
+async def give_products_amount(request: Request, product_name: str = Form(), db: Session = Depends(get_db)):
     product = db.query(Product).filter(
         (product_name == Product.name) | (func.upper(Product.name) == product_name.upper())
     ).first()
 
     if product is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="The product was not found"
+        return templates.TemplateResponse(
+            "products_list.html",
+            {
+                "request": request,
+                "error_message": "The product was not found. Try again!",
+                "product_name": None,
+                "amount": None,
+            }
         )
-    return {"product": product.name, "amount": product.quantity}
 
-
-async def give_forecast():
-    pass
+    return templates.TemplateResponse(
+        "products_list.html",
+        {
+            "request": request,
+            "error_message": None,
+            "product_name": product.name,
+            "amount": product.quantity,
+        }
+    )
