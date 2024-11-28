@@ -1,10 +1,11 @@
 import random
 import jwt
 
-from fastapi import FastAPI, Form, Depends, status, HTTPException
+from fastapi import FastAPI, Form, status, HTTPException, Request
 from fastapi.params import Depends
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials, OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.templating import Jinja2Templates
 
 from pathlib import Path
 
@@ -14,9 +15,10 @@ from datetime import timedelta, timezone, datetime
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
-from sqlalchemy.sql.functions import current_user
+from sqlalchemy.sql.functions import current_user, func
+from websockets.legacy.server import HTTPResponse
 
-from app.models.models import Base, Person
+from app.models.models import Base, Users, Product
 
 SQLALCHEMY_DATABASE_URL = "postgresql://postgres:sanji@127.0.0.1/service_db"
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
@@ -55,8 +57,8 @@ async def register(username: str = Form(), user_password: str = Form(), db: Sess
         role = "admin"
     else:
         role = "guest"
-    new_user = Person(username=username, hashed_password=hashed_password,
-                      token=str(random.randint(10000, 99999)) + "z", role=role)
+    new_user = Users(username=username, hashed_password=hashed_password,
+                     token=str(random.randint(10000, 99999)) + "z", role=role)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
@@ -78,7 +80,7 @@ def get_password_hash(password):
 
 
 def get_user(username: str, db: Session = Depends(get_db)):
-    user = db.query(Person).filter(Person.username == username).first()
+    user = db.query(Users).filter(username == Users.username).first()
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return user
@@ -133,6 +135,7 @@ async def protected_resource(token: str = Depends(oauth2_scheme)):
     return {"message": "Access granted to protected resource", "user": username}
     # return username
 
+
 # роль админа
 @app.get("/admin/")
 async def get_admin_info(current_user: str = Depends(protected_resource), db: Session = Depends(get_db)):
@@ -142,6 +145,7 @@ async def get_admin_info(current_user: str = Depends(protected_resource), db: Se
     if user.role != "admin":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized")
     return {"message": f"Welcome admin {user.username}"}
+
 
 # роль пользователя/гостя
 @app.get("/guest/")
@@ -160,11 +164,41 @@ async def check_products_amount():
     pass
 
 
-# выдача количества продукта и прогноза
-@app.get("/products_amount")
-async def give_products_amount():
-    pass
-
-
 async def give_forecast():
     pass
+
+
+templates = Jinja2Templates(directory="app/frontend")
+
+@app.get("/products_amount", response_class=HTMLResponse)
+async def show_products_page(request: Request):
+    return templates.TemplateResponse("products_list.html", {"request": request})
+
+
+# выдача количества продукта и прогноза
+@app.post("/products_amount", response_class=HTMLResponse)
+async def give_products_amount(request: Request, product_name: str = Form(), db: Session = Depends(get_db)):
+    product = db.query(Product).filter(
+        (product_name == Product.name) | (func.upper(Product.name) == product_name.upper())
+    ).first()
+
+    if product is None:
+        return templates.TemplateResponse(
+            "products_list.html",
+            {
+                "request": request,
+                "error_message": "The product was not found. Try again!",
+                "product_name": None,
+                "amount": None,
+            }
+        )
+
+    return templates.TemplateResponse(
+        "products_list.html",
+        {
+            "request": request,
+            "error_message": None,
+            "product_name": product.name,
+            "amount": product.quantity,
+        }
+    )

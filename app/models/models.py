@@ -5,11 +5,19 @@ from sqlalchemy import Column, Integer, String
 Base = declarative_base()
 
 
-class Person(Base):
+class Users(Base):
     __tablename__= "Users"
 
-    id = Column(Integer, primary_key=True, index=True)
-    username = Column(String)
-    hashed_password = Column(String)
-    token = Column(String)
-    role = Column(String)
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    username = Column(String, nullable=False)
+    hashed_password = Column(String, nullable=False)
+    token = Column(String, nullable=False)
+    role = Column(String, nullable=False)
+
+class Product(Base):
+    __tablename__ = "Product"
+
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    name = Column(String, nullable=False)
+    quantity = Column(Integer, nullable=False)
+    price = Column(Integer, nullable=False)
