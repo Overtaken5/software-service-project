@@ -14,9 +14,9 @@ from datetime import timedelta, timezone, datetime
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
-from sqlalchemy.sql.functions import current_user
+from sqlalchemy.sql.functions import current_user, func
 
-from app.models.models import Base, Person
+from app.models.models import Base, Users, Product
 
 SQLALCHEMY_DATABASE_URL = "postgresql://postgres:sanji@127.0.0.1/service_db"
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
@@ -44,7 +44,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 15
 
 @app.get("/")
 async def root():
-    file_path = Path("app/frontend/index.html")
+    file_path = Path("app/frontend/products_list.html")
     return FileResponse(file_path)
 
 
@@ -55,8 +55,8 @@ async def register(username: str = Form(), user_password: str = Form(), db: Sess
         role = "admin"
     else:
         role = "guest"
-    new_user = Person(username=username, hashed_password=hashed_password,
-                      token=str(random.randint(10000, 99999)) + "z", role=role)
+    new_user = Users(username=username, hashed_password=hashed_password,
+                     token=str(random.randint(10000, 99999)) + "z", role=role)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
@@ -78,7 +78,7 @@ def get_password_hash(password):
 
 
 def get_user(username: str, db: Session = Depends(get_db)):
-    user = db.query(Person).filter(Person.username == username).first()
+    user = db.query(Users).filter(username == Users.username).first()
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return user
@@ -133,6 +133,7 @@ async def protected_resource(token: str = Depends(oauth2_scheme)):
     return {"message": "Access granted to protected resource", "user": username}
     # return username
 
+
 # роль админа
 @app.get("/admin/")
 async def get_admin_info(current_user: str = Depends(protected_resource), db: Session = Depends(get_db)):
@@ -142,6 +143,7 @@ async def get_admin_info(current_user: str = Depends(protected_resource), db: Se
     if user.role != "admin":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized")
     return {"message": f"Welcome admin {user.username}"}
+
 
 # роль пользователя/гостя
 @app.get("/guest/")
@@ -161,9 +163,18 @@ async def check_products_amount():
 
 
 # выдача количества продукта и прогноза
-@app.get("/products_amount")
-async def give_products_amount():
-    pass
+@app.post("/products_amount")
+async def give_products_amount(product_name: str = Form(), db: Session = Depends(get_db)):
+    product = db.query(Product).filter(
+        (product_name == Product.name) | (func.upper(Product.name) == product_name.upper())
+    ).first()
+
+    if product is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="The product was not found"
+        )
+    return {"product": product.name, "amount": product.quantity}
 
 
 async def give_forecast():
