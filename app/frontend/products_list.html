@@ -1,0 +1,30 @@
+<!--страница выдачи данных о количестве товара-->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Products List</title>
+</head>
+<body>
+    <h2>Type a name of needed product</h2>
+    <!-- Форма для поиска продукта -->
+    <form action="/products_amount" method="post">
+        <p>
+            Name:<br>
+            <input type="text" name="product_name" required />
+        </p>
+        <input type="submit" value="Search" />
+    </form>
+    <!-- Если есть сообщение об ошибке -->
+    {% if error_message %}
+        <p style="color: red;">{{ error_message }}</p>
+    {% endif %}
+
+    <!-- Если продукт найден -->
+    {% if product_name and amount is not none %}
+        <p><strong>Product:</strong> {{ product_name }}</p>
+        <p><strong>Amount:</strong> {{ amount }}</p>
+    {% endif %}
+</body>
+</html>
+
