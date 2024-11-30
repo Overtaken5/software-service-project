@@ -8,9 +8,10 @@ import sys
 # Добавляем путь к родительской директории, чтобы импортировать main
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
-from app.models.models import Base, Users, Product
-import app.main
-from app.main import app, get_db
+from app.api.models.models import Base, Users, Product
+import app.api.main
+from app.api.main import app
+from app.api.login import get_db
 
 # SQLALCHEMY_DATABASE_URL для тестирования
 SQLALCHEMY_DATABASE_URL = "postgresql://postgres:sanji@127.0.0.1/service_db"
@@ -39,7 +40,7 @@ client = TestClient(app)
 @pytest.fixture
 def create_test_user():
     db = TestingSessionLocal()
-    test_user = Users(username="testuser", hashed_password=app.main.get_password_hash("testpassword"), token="12345z", role="guest")
+    test_user = Users(username="testuser", hashed_password=app.routes.main.get_password_hash("testpassword"), token="12345z", role="guest")
     db.add(test_user)
     db.commit()
     db.refresh(test_user)
@@ -51,7 +52,7 @@ def create_test_user():
 @pytest.fixture
 def create_admin_user():
     db = TestingSessionLocal()
-    admin_user = Users(username="adminuser", hashed_password=app.main.get_password_hash("adminpassword"), token="67890z", role="admin")
+    admin_user = Users(username="adminuser", hashed_password=app.routes.main.get_password_hash("adminpassword"), token="67890z", role="admin")
     db.add(admin_user)
     db.commit()
     db.refresh(admin_user)
