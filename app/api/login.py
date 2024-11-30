@@ -1,25 +1,21 @@
 import random
 import jwt
 
-from fastapi import FastAPI, Form, status, HTTPException, Request
+from fastapi import Form, HTTPException, status, APIRouter
 from fastapi.params import Depends
-from fastapi.responses import FileResponse, HTMLResponse
-from fastapi.security import HTTPBasic, HTTPBasicCredentials, OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from fastapi.templating import Jinja2Templates
+from fastapi.responses import FileResponse
+from fastapi.security import HTTPBasic, OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from pathlib import Path
-
-from numpy.ma.core import append
 from passlib.context import CryptContext
 from datetime import timedelta, timezone, datetime
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
-from sqlalchemy.sql.functions import current_user, func
-from websockets.legacy.server import HTTPResponse
 
-from app.models.models import Base, Users, Product
+from app.api.models.models import Base, Users
 
+auth = APIRouter()
 SQLALCHEMY_DATABASE_URL = "postgresql://postgres:sanji@127.0.0.1/service_db"
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 Base.metadata.create_all(bind=engine)
@@ -37,20 +33,18 @@ def get_db():
     finally:
         db.close()  # закрываем сессию, чтобы освободить ресурсы
 
-
-app = FastAPI()
 SECRET_KEY = "mugiwaraluffy"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 15
 
 
-@app.get("/")
+@auth.get("/")
 async def root():
     file_path = Path("app/frontend/index.html")
     return FileResponse(file_path)
 
 
-@app.post("/registration")
+@auth.post("/registration")
 async def register(username: str = Form(), user_password: str = Form(), db: Session = Depends(get_db)):
     hashed_password = get_password_hash(user_password)  # Хэшируем пароль
     if username == "kuleshovd":
@@ -107,7 +101,7 @@ def authenticate_user(db, username: str, password: str):
 
 
 # рут генерации токена по имени пользователя
-@app.post("/login")
+@auth.post("/login")
 async def login_for_access_token(db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()):
     username = form_data.username
     password = form_data.password
@@ -120,7 +114,7 @@ async def login_for_access_token(db: Session = Depends(get_db), form_data: OAuth
 
 
 # проверка аутентификации пользователя
-@app.get("/protected_resource")
+@auth.get("/protected_resource")
 async def protected_resource(token: str = Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -133,11 +127,9 @@ async def protected_resource(token: str = Depends(oauth2_scheme)):
         raise HTTPException(status_code=401, detail="Invalid token", headers={"WWW-Authenticate": "Basic"})
 
     return {"message": "Access granted to protected resource", "user": username}
-    # return username
-
 
 # роль админа
-@app.get("/admin/")
+@auth.get("/admin/")
 async def get_admin_info(current_user: str = Depends(protected_resource), db: Session = Depends(get_db)):
     username = current_user["user"]
     user = get_user(username, db)
@@ -148,7 +140,7 @@ async def get_admin_info(current_user: str = Depends(protected_resource), db: Se
 
 
 # роль пользователя/гостя
-@app.get("/guest/")
+@auth.get("/guest/")
 async def get_guest_info(current_user: str = Depends(protected_resource), db: Session = Depends(get_db)):
     username = current_user["user"]
     user = get_user(username, db)
@@ -156,49 +148,3 @@ async def get_guest_info(current_user: str = Depends(protected_resource), db: Se
     if user.role != "guest":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized")
     return {"message": f"Hello guest {user.username}"}
-
-
-# прогноз продуктов
-@app.post("/products_forecast")
-async def check_products_amount():
-    pass
-
-
-async def give_forecast():
-    pass
-
-
-templates = Jinja2Templates(directory="app/frontend")
-
-@app.get("/products_amount", response_class=HTMLResponse)
-async def show_products_page(request: Request):
-    return templates.TemplateResponse("products_list.html", {"request": request})
-
-
-# выдача количества продукта и прогноза
-@app.post("/products_amount", response_class=HTMLResponse)
-async def give_products_amount(request: Request, product_name: str = Form(), db: Session = Depends(get_db)):
-    product = db.query(Product).filter(
-        (product_name == Product.name) | (func.upper(Product.name) == product_name.upper())
-    ).first()
-
-    if product is None:
-        return templates.TemplateResponse(
-            "products_list.html",
-            {
-                "request": request,
-                "error_message": "The product was not found. Try again!",
-                "product_name": None,
-                "amount": None,
-            }
-        )
-
-    return templates.TemplateResponse(
-        "products_list.html",
-        {
-            "request": request,
-            "error_message": None,
-            "product_name": product.name,
-            "amount": product.quantity,
-        }
-    )
