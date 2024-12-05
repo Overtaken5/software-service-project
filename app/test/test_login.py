@@ -3,7 +3,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.api.models.models import Base, Users
-from app.api.login import auth, get_db
+from app.api.db_connection import auth, get_db
 from app.api.main import app
 
 # Подключение к реальной базе данных PostgreSQL

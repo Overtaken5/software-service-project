@@ -11,7 +11,7 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 from app.api.models.models import Base, Users, Product
 import app.api.main
 from app.api.main import app
-from app.api.login import get_db
+from app.api.db_connection import get_db
 
 # SQLALCHEMY_DATABASE_URL для тестирования
 SQLALCHEMY_DATABASE_URL = "postgresql://postgres:sanji@127.0.0.1/service_db"
