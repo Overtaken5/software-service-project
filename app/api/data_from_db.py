@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.sql.functions import func
 
 from app.api.models.models import Product
-from app.api.login import get_db
+from app.api.db_connection import get_db
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/frontend")
