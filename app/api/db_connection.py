@@ -13,7 +13,7 @@ from datetime import timedelta, timezone, datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 
-from app.api.models.models import Base, Users
+from app.api.models.models import Base
 
 auth = APIRouter()
 SQLALCHEMY_DATABASE_URL = "postgresql://postgres:sanji@127.0.0.1/service_db"
