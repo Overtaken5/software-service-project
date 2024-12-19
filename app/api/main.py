@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 from app.api.data_from_db import router
-from app.api.login import auth
+from app.api.db_connection import auth
 
 app = FastAPI()
 app.include_router(router)

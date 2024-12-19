@@ -3,10 +3,10 @@ import psycopg2
 
 # Тестовые параметры для подключения
 conn_params = {
-    "host": "localhost",
+    "host": "127.0.0.1",
     "database": "service_db",
     "user": "postgres",
-    "password": "123456"
+    "password": "sanji"
 }
 
 @pytest.fixture(scope="module")
