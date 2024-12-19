@@ -152,13 +152,20 @@ end = '2018-06-01'
 prognosis = Prognosis(product, start, end)
 
 """
-Выводит список из json
+Выводит список из json (string)
 Формат каждого json элемента в списке:
 {
-    "date": дата формата yyyy-mm-01 (str), 
+    "date": дата формата yyyy-mm-01 (string), 
     "quantity": остаток на эту дату (int), 
     "actual": true, если данные взяты из датасета, false, если это прогноз. 
         Скорее всего у вас всегда будет actual = false, потому что вам интересен прогноз (bool)
 }
 """
-print(prognosis.get_json_prognosis())
+result = prognosis.get_json_prognosis()
+print(result)
+
+# Прочитаем один элемент из списка
+import json
+list_of_result = json.loads(result)
+print('1st element:', list_of_result[0])
+print('1st element\'s quantity:', list_of_result[0]['quantity'])
