@@ -6,50 +6,56 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.functions import func
 
-from app.api.models.models import Product
+from app.api.models.models import Products, Product
 from app.api.db_connection import get_db
 
 router = APIRouter()
-templates = Jinja2Templates(directory="app/frontend")
-
-# прогноз продуктов
-@router.post("/products_forecast")
-async def check_products_amount():
-    pass
 
 
-async def give_forecast():
-    pass
+# # прогноз продуктов
+# @router.post("/products_forecast")
+# async def check_products_amount():
+#     pass
+#
+#
+# async def give_forecast():
+#     pass
 
-@router.get("/products_amount", response_class=HTMLResponse)
-async def show_products_page(request: Request):
-    return templates.TemplateResponse("products_list.html", {"request": request})
 
-
-# выдача количества продукта и прогноза
-@router.post("/products_amount", response_class=HTMLResponse)
-async def give_products_amount(request: Request, product_name: str = Form(), db: Session = Depends(get_db)):
-    product = db.query(Product).filter(
-        (product_name == Product.name) | (func.upper(Product.name) == product_name.upper())
+# параметры продукта по названию
+@router.get("/one_product_amount")
+async def get_product_by_name(product_name: str, db: Session = Depends(get_db)):
+    product = db.query(Products).filter(
+        (product_name == Products.Name) | (func.upper(Products.Name) == product_name.upper())
     ).first()
-
     if product is None:
-        return templates.TemplateResponse(
-            "products_list.html",
-            {
-                "request": request,
-                "error_message": "The product was not found. Try again!",
-                "product_name": None,
-                "amount": None,
-            }
-        )
+        return {"error": f"Product '{product_name}' was not found in the database."}
+    return {"message": f"Product '{product_name}' exists in the database."}
 
-    return templates.TemplateResponse(
-        "products_list.html",
-        {
-            "request": request,
-            "error_message": None,
-            "product_name": product.name,
-            "amount": product.quantity,
-        }
-    )
+
+@router.post("/one_product_amount")
+async def get_product_details(product_name: str = Form(...), db: Session = Depends(get_db)):
+    product = db.query(Products).filter(
+        (product_name == Products.Name) | (func.upper(Products.Name) == product_name.upper())
+    ).first()
+    if product is None:
+        return {"error": f"Product '{product_name}' was not found in the database."}
+    return {
+        "name": product.Name,
+        "quantity": product.CurrentStock,
+        "price": product.Price
+    }
+
+
+
+# json всех продуктов в БД
+@router.get("/all_products")
+async def get_all_products(db: Session = Depends(get_db)):
+    products = db.query(Products).all()
+    product_list = [
+        {"name": product.Name}
+        for product in products
+    ]
+    if not product_list:
+        return {"error": "No products found in the database."}
+    return product_list

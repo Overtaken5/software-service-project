@@ -25,13 +25,13 @@ SessionLocal = sessionmaker(autoflush=False, bind=engine)
 security = HTTPBasic()
 
 
-# Функция для получения сессии
 def get_db():
-    db = SessionLocal()  # создаём экземпляр сессии
+    db = SessionLocal()
     try:
-        yield db  # возвращаем сессию для использования
+        yield db
     finally:
-        db.close()  # закрываем сессию, чтобы освободить ресурсы
+        db.close()
+
 
 SECRET_KEY = "mugiwaraluffy"
 ALGORITHM = "HS256"
@@ -40,6 +40,4 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 15
 
 @auth.get("/")
 async def root():
-    file_path = Path("app/frontend/index.html")
-    return FileResponse(file_path)
-
+    return {"message": "Welcome to the Products API! Use the available endpoints to interact with the database."}
