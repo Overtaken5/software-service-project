@@ -4,7 +4,7 @@ import pandas as pd
 import sys, os
 
 # Путь к модулю
-sys.path.append(os.path.join(os.getcwd(), '..', 'product quantity forecast'))
+sys.path.append(os.path.join(os.getcwd(), '..', 'product_quantity_forecast'))
 
 # Теперь можно использовать ваш модуль
 from quantity_forecast import Product, Prognosis

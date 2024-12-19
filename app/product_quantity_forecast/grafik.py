@@ -46,7 +46,7 @@ def plot_prognosis(prognosis_json, start_date, end_date):
 # Пример использования:
 # Предположим, что prognosis.get_json_prognosis() возвращает данные в формате JSON
 
-product = Product(2, 'name dosn\'t matter')
+product = Tovar(2, 'name dosn\'t matter')
 start = '2020-01-01'
 end = '2024-01-01'
 prognosis = Prognosis(product, start, end)
