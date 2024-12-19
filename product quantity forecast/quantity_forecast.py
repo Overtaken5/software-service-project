@@ -132,8 +132,40 @@ class Prognosis:
         return filtered_df[['date', 'quantity', 'actual']]
 
 # Пример формирования JSON прогноза
-product = Product(2, 'name dosn\'t matter')
+
+# Устанавливаем нужную библиотеку через консоль, если не установлена:
+# pip install prophet
+
+# Нужно инцициализировать объект класса Product
+# Он уже реализован в данном файле 
+# Объект Product обязательно должен иметь свойства id (int) и name (string)
+# product.id можно выбрать между [1, 7]
+product = Product(2, 'name doesn\'t matter')
+
+# Нужно определить период прогноза в формате yyyy-mm-01
+# Прогноз будет по месяцам, поэтому день не важен
 start = '2014-01-01'
 end = '2018-06-01'
+
+# Инициализируем сам объект Prognosis с определенными параметрами
+# Данные для прогноза загружает из интернета, поэтому никакие файлы себе скачивать не нужно
 prognosis = Prognosis(product, start, end)
-print(prognosis.get_json_prognosis())
+
+"""
+Выводит список из json (string)
+Формат каждого json элемента в списке:
+{
+    "date": дата формата yyyy-mm-01 (string), 
+    "quantity": остаток на эту дату (int), 
+    "actual": true, если данные взяты из датасета, false, если это прогноз. 
+        Скорее всего у вас всегда будет actual = false, потому что вам интересен прогноз (bool)
+}
+"""
+result = prognosis.get_json_prognosis()
+print(result)
+
+# Прочитаем один элемент из списка
+import json
+list_of_result = json.loads(result)
+print('1st element:', list_of_result[0])
+print('1st element\'s quantity:', list_of_result[0]['quantity'])
