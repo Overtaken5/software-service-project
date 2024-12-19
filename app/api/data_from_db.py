@@ -1,7 +1,5 @@
 from fastapi import Form, Request, APIRouter
 from fastapi.params import Depends
-from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
 
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.functions import func
