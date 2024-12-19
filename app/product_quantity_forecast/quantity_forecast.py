@@ -2,7 +2,7 @@ import pandas as pd
 from prophet import Prophet
 import datetime
 
-class Product:
+class Tovar:
     def __init__(self, id, name):
         self.id = id
         self.name = name
@@ -11,7 +11,7 @@ class Prognosis:
     # template link to datasets for prognosis
     LOCAL_FILE = r'https://raw.githubusercontent.com/Overtaken5/software-service-project/refs/heads/master/datasets/product_id.csv'
     '''
-    product - instance of Product class
+    product - instance of Tovar class
     start_date, end_date - string in yyyy-mm-dd format
     '''
     def __init__(self, product, start_date, end_date):
@@ -131,8 +131,8 @@ class Prognosis:
 
         return filtered_df[['date', 'quantity', 'actual']]
 
-product = Product(2, 'name dosn\'t matter')
-start = '2014-01-01'
-end = '2018-06-01'
-prognosis = Prognosis(product, start, end)
-print(prognosis.get_json_prognosis())
+# product = Tovar(2, 'name dosn\'t matter')
+# start = '2024-01-01'
+# end = '2024-02-01'
+# prognosis = Prognosis(product, start, end)
+# print(prognosis.get_json_prognosis())
