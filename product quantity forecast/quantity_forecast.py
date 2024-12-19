@@ -11,7 +11,7 @@ class Prognosis:
     # template link to datasets for prognosis
     LOCAL_FILE = r'https://raw.githubusercontent.com/Overtaken5/software-service-project/refs/heads/master/datasets/product_id.csv'
     '''
-    product - instance of Product class
+    product - instance of Tovar class
     start_date, end_date - string in yyyy-mm-dd format
     '''
     def __init__(self, product, start_date, end_date):
@@ -136,9 +136,9 @@ class Prognosis:
 # Устанавливаем нужную библиотеку через консоль, если не установлена:
 # pip install prophet
 
-# Нужно инцициализировать объект класса Product
+# Нужно инцициализировать объект класса Tovar
 # Он уже реализован в данном файле 
-# Объект Product обязательно должен иметь свойства id (int) и name (string)
+# Объект Tovar обязательно должен иметь свойства id (int) и name (string)
 # product.id можно выбрать между [1, 7]
 product = Product(2, 'name doesn\'t matter')
 

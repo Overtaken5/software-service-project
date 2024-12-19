@@ -54,8 +54,8 @@ def test_insert_orderproduct_with_foreign_keys(db_connection):
 
     # Вставляем продукт
     cur.execute("""
-        INSERT INTO public."Product" ("name", quantity, price)
-        VALUES ('Test Product', 10, 100) RETURNING id
+        INSERT INTO public."Tovar" ("name", quantity, price)
+        VALUES ('Test Tovar', 10, 100) RETURNING id
     """)
     product_id = cur.fetchone()[0]
 
