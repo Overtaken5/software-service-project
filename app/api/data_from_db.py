@@ -16,6 +16,7 @@ from app.api.db_connection import get_db
 from app.product_quantity_forecast.quantity_forecast import Prognosis, Tovar
 from datetime import datetime, timedelta
 from app.product_quantity_forecast.grafik import plot_prognosis
+
 router = APIRouter()
 
 
@@ -95,6 +96,7 @@ async def get_product_forecast(
         "forecast": [result_forecast]
     }
 
+
 # выдача графика прогноза
 @router.post("/product_forecast_graph")
 async def get_product_forecast_graph(
@@ -119,16 +121,12 @@ async def get_product_forecast_graph(
     prognosis = Prognosis(product_instance, start_date, end_date)
 
     try:
-        # Получение прогноза
         forecast = prognosis.get_json_prognosis()
         forecast_data = json.loads(forecast)  # Парсим строку JSON в список словарей
-
-        # Построение графика
         graph_filename = plot_prognosis(forecast, start_date, end_date)
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Error generating forecast or graph: {str(e)}")
 
-        # Возврат файла графика
     return FileResponse(
         path=graph_filename,
         media_type="image/png",
