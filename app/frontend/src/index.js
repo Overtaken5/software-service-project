@@ -1,5 +1,7 @@
 import './styles/style.scss';
-import {products,debounce} from './assets/search';
+ import {searchHelper,debounce} from './assets/search';
+import {getAllProducts} from './api/api_request';
+import {createSearchArr} from './assets/chenge_data';
 
 document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('searchInput');
@@ -7,10 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const faqItemsContainer = document.getElementById('faqItemsContainer');
   const faqItemTemplate = document.getElementById('faqItemTemplate');
   const suggestionsList = document.getElementById('suggestions');
-
+  let Product = []; 
 
   const fetchItems = async (query) => {
-
     const mockData = [
       { name: 'Product A', date: '2024-12-19', quantity: 10, price: 25 },
       { name: 'Product B', date: '2024-11-15', quantity: 5, price: 15 },
@@ -20,6 +21,23 @@ document.addEventListener('DOMContentLoaded', () => {
     await new Promise((resolve) => setTimeout(resolve, 500));
     return mockData.filter((item) => item.name.toLowerCase().includes(query.toLowerCase()));
   };
+
+  getAllProducts()
+    .then((data) => {
+      console.log(data);
+      const namedProduct = createSearchArr(data);
+      console.log(namedProduct);
+      Product = [...Product, ...namedProduct];
+      console.log('Updated Product array:', Product);
+      searchHelper(Product,suggestionsList)
+    })
+    .catch((error) => {
+      console.error('Нет соединения с сервером');
+    })
+    .finally(() => {
+      console.log('...');
+    });
+
 
 
   const createFaqItem = (item) => {
@@ -74,33 +92,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-  searchInput.addEventListener('input', (e) => {
-    const query = e.target.value.toLowerCase().trim();
-    suggestionsList.innerHTML = ''; 
+  // searchInput.addEventListener('input', (e) => {
+  //   const query = e.target.value.toLowerCase().trim();
+  //   suggestionsList.innerHTML = ''; 
   
-    if (query) {
-      const filteredProducts = products.filter((product) =>
-        product.toLowerCase().startsWith(query)
-      );
+  //   if (query) {
+  //     const filteredProducts = products.filter((product) =>
+  //       product.toLowerCase().startsWith(query)
+  //     );
   
-      filteredProducts.forEach((product) => {
-        const li = document.createElement('li');
+  //     filteredProducts.forEach((product) => {
+  //       const li = document.createElement('li');
   
-        const matchedText = product.slice(0, query.length);
-        const unmatchedText = product.slice(query.length);
+  //       const matchedText = product.slice(0, query.length);
+  //       const unmatchedText = product.slice(query.length);
   
-        li.innerHTML = `
-          <span class="matched">${matchedText}</span>
-          <span class="unmatched">${unmatchedText}</span>
-        `;
+  //       li.innerHTML = `
+  //         <span class="matched">${matchedText}</span>
+  //         <span class="unmatched">${unmatchedText}</span>
+  //       `;
   
-        li.addEventListener('click', () => {
-          searchInput.value = product;  
-          suggestionsList.innerHTML = ''; 
-        });
+  //       li.addEventListener('click', () => {
+  //         searchInput.value = product;  
+  //         suggestionsList.innerHTML = ''; 
+  //       });
   
-        suggestionsList.appendChild(li);
-      });
-    }
-  });
+  //       suggestionsList.appendChild(li);
+  //     });
+  //   }
+  // });
 });

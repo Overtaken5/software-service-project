@@ -19,6 +19,7 @@ from app.product_quantity_forecast.grafik import plot_prognosis
 router = APIRouter()
 
 
+
 # параметры продукта по названию
 @router.get("/one_product_amount")
 async def get_product_by_name(product_name: str, db: Session = Depends(get_db)):
