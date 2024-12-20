@@ -34,14 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  fetchProductForecast("Product 1", 1)
-  .then((data)=>{
-    console.log(data);
-  })
-  .catch((error)=>{
-    console.log(error);
-  })
-
   getAllProducts()
     .then((data) => {
       console.log(data);
@@ -82,6 +74,11 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Ошибка загрузки графика");
           }
           answer.classList.toggle('visible');
+          if(expandBtn.textContent =="+"){
+            expandBtn.textContent = "-";
+          }else{
+            expandBtn.textContent = "+";
+          }
         } catch (error) {
           console.error("Ошибка при обработке графика:", error);
         }
