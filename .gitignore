@@ -2,4 +2,6 @@
 .idea/workspace.xml
 .idea/software-service-project.iml
 .idea/misc.xml
+.idea/InspectionProfiles/profiles_settings.xml
+.idea/vcs.xml
 node_modules
