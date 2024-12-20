@@ -71,17 +71,19 @@ document.addEventListener('DOMContentLoaded', () => {
    
     const createFaqItem = (item) => {
       const faqItem = faqItemTemplate.content.cloneNode(true);
+      console.log(faqItem,"tttt");
       faqItem.querySelector('.item-name').textContent = item.name;
       faqItem.querySelector('.item-date').textContent = item.date;
       faqItem.querySelector('.item-quantity').textContent = item.quantity;
       faqItem.querySelector('.item-price').textContent = `$${item.price}`;
-  
+      const graphImage = faqItem.querySelector('.graph_image');
+      console.log(graphImage,"RRRR")
       const expandBtn = faqItem.querySelector('.expand-btn');
       const answer = faqItem.querySelector('.answer');
   
       expandBtn.addEventListener('click', async () => {
         try {
-          const graphImage = document.getElementById('graph_image');
+          
           const imageUrl = await fetchForecastGraph(item.name, monthSelector.value);
           if (imageUrl) {
             console.log(imageUrl)
