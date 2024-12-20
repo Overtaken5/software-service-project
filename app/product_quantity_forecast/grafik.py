@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-from quantity_forecast import *
+from app.product_quantity_forecast.quantity_forecast import *
 
 def plot_prognosis(prognosis_json, start_date, end_date):
     # Преобразуем JSON данные в DataFrame
