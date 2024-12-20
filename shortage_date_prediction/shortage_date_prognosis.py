@@ -4,7 +4,7 @@ import numpy as np
 from datetime import timedelta
 from sklearn.linear_model import LinearRegression
 
-class Product:
+class ProductShortage:
     def __init__(self, id, name):
         self.id = id
         self.name = name
@@ -166,17 +166,3 @@ class ShortagePrognosis:
         shortage_date = df['date'].max() + timedelta(days=days_left)
         return (True, shortage_date.strftime('%Y-%m-%d'))
 
-# Example 1
-product = Tovar(1, 'pp')
-prognosis = ShortagePrognosis(product)
-print("Test 1.", prognosis.get_shortage_date())
-
-# Example 2
-product = Tovar(1, 'pp')
-prognosis = ShortagePrognosis(product, min_interval_l=200)
-print("Test 2.", prognosis.get_shortage_date())
-
-# Example 3
-product = Tovar(1, 'pp')
-prognosis = ShortagePrognosis(product, min_interval_l=1000)
-print("Test 3.", prognosis.get_shortage_date())
