@@ -24,3 +24,20 @@ export const getAllProducts = () => {
         return response.json()
     });
 };
+
+export const getProductDetails = (productName) => {
+    return fetch(`${config.baseUrl}/one_product_amount`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            product_name: productName,
+        }),
+    }).then((response) => {
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+        }
+        return response.json();
+    });
+};

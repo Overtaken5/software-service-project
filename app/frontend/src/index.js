@@ -1,6 +1,6 @@
 import './styles/style.scss';
  import {searchHelper,debounce} from './assets/search';
-import {getAllProducts} from './api/api_request';
+import {getAllProducts,getProductDetails} from './api/api_request';
 import {createSearchArr} from './assets/chenge_data';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,6 +12,13 @@ document.addEventListener('DOMContentLoaded', () => {
   let Product = []; 
 
   const fetchItems = async (query) => {
+
+    getProductDetails('Product 1')
+      .then((data) =>{ 
+        console.log('POST Response:', data)
+      })
+      .catch((error) => console.error('Error:', error));
+
     const mockData = [
       { name: 'Product A', date: '2024-12-19', quantity: 10, price: 25 },
       { name: 'Product B', date: '2024-11-15', quantity: 5, price: 15 },
@@ -20,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     await new Promise((resolve) => setTimeout(resolve, 500));
     return mockData.filter((item) => item.name.toLowerCase().includes(query.toLowerCase()));
+
   };
 
   getAllProducts()
@@ -38,6 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('...');
     });
 
+  // getProductDetails('Product 1')
+  // .then((data) => console.log('POST Response:', data))
+  // .catch((error) => console.error('Error:', error));
 
 
   const createFaqItem = (item) => {
