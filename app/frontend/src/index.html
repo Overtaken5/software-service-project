@@ -1,44 +1,58 @@
 
-<!DOCTYPE html>
-<html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FAQ Page</title>
-  </head>
-  <body>
+<div class="container">
+  <section class="faq">
+    <h2>Заполнение Склада</h2>
 
-    <header>
-      <nav>
-        <div class="logo">Logo</div>
-        <ul class="nav-links">
-          <li>Home Page</li>
-          <li>About Company</li>
-          <li>Our Team</li>
-          <li>Our Services</li>
-          <li>Contact Us</li>
-        </ul>
-      </nav>
-    </header>
+    <div class="search-container" style="position: relative;">
+      <div class="search">
+        <input type="text" id="searchInput" placeholder="Поиск по товарам..." autocomplete="off" />
+        <button id="searchButton">Поиск</button>
+        <select id="monthSelector">
+          <option value="1">1 месяц</option>
+          <option value="2">2 месяца</option>
+          <option value="3">3 месяца</option>
+          <option value="4">4 месяца</option>
+          <option value="5">5 месяцев</option>
+          <option value="6">6 месяцев</option>
+          <option value="7">7 месяцев</option>
+          <option value="8">8 месяцев</option>
+          <option value="9">9 месяцев</option>
+          <option value="10">10 месяцев</option>
+          <option value="11">11 месяцев</option>
+          <option value="12">12 месяцев</option>
+        </select>
+        <ul class="suggestions-list" id="suggestions"></ul>
+      </div>
+    </div>
 
-    <main>
-      <section class="faq">
-        <h1>Часто задаваемые вопросы</h1>
-        <div class="questions">
-          <div class="question">
-            <h3>How much does it cost?</h3>
+
+    <div id="faqItemsContainer"></div>
+
+
+    <template id="faqItemTemplate">
+      <div class="faq-item">
+        <div class="item-info">
+          <div class="item-name"></div>
+          <div class="item-date"></div>
+          <div class="item-quantity"></div>
+          <div class="item-price"></div>
+          <button class="expand-btn">+</button>
+        </div>
+        <div class="answer">
+          <div class="order-section">
+            <label for="orderQuantity">Количество:</label>
+            <input type="number" id="orderQuantity" class="order-quantity" min="1" value="1" />
+            <button class="order-btn">Заказать</button>
           </div>
-          <div class="question">
-            <h3>How Fast Are Your Services?</h3>
-          </div>
-          <div class="question">
-            <h3>What types of customers have you worked with?</h3>
-          </div>
-          <div class="question">
-            <h3>What education and/or training do you have?</h3>
+          <div class="chart-section">
+            <p>График данных:</p>
+            <div class="chart-placeholder">
+              <img src="https://via.placeholder.com/300x150?text=График" alt="График данных" />
+            </div>
           </div>
         </div>
-      </section>
-    </main>
-  </body>
-</html>
+        
+      </div>
+    </template>
+  </section>
+</div>
