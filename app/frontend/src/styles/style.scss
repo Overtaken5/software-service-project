@@ -1,53 +1,17 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-  }
-  
-  body {
-    background-color: #f8f8f8;
-    color: #333;
-  }
-  
-  header {
-    background-color: #eee;
-    padding: 10px;
-  
-    .nav-links {
-      list-style: none;
-      display: flex;
-      justify-content: space-around;
-  
-      li {
-        cursor: pointer;
-  
-        &:hover {
-          color: #007bff;
-        }
-      }
-    }
-  }
-  
-  .faq {
-    padding: 20px;
-  
-    h1 {
-      margin-bottom: 20px;
-    }
-  
-    .questions {
-      .question {
-        padding: 15px;
-        margin: 10px 0;
-        background-color: #fff;
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  
-        h3 {
-          cursor: pointer;
-        }
-      }
-    }
-  }
-  
+@use 'variables' as vars;
+@use 'animations';
+@use 'faq';
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: vars.$font-family;
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+  color: #333;
+  line-height: 1.6;
+}
+
+.container {
+  padding: 2rem;
+  animation: fadeIn 1.5s ease-in-out;
+}

@@ -3,16 +3,13 @@ from unittest.mock import patch, MagicMock
 import pandas as pd
 import sys, os
 
-# Путь к модулю
-sys.path.append(os.path.join(os.getcwd(), '..', 'product_quantity_forecast'))
-
 # Теперь можно использовать ваш модуль
-from quantity_forecast import Product, Prognosis
+from app.product_quantity_forecast.quantity_forecast import Tovar, Prognosis
 
 # Создаем фикстуры для объектов
 @pytest.fixture
 def product():
-    return Product(2, 'name doesn\'t matter')
+    return Tovar(2, 'name doesn\'t matter')
 
 @pytest.fixture
 def prognosis(product):
