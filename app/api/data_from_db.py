@@ -92,6 +92,7 @@ async def get_product_forecast(
         raise HTTPException(status_code=400, detail=f"Error generating forecast: {str(e)}")
 
     return {
+        "product_price":product.Price,
         "product_id": product.Id,
         "product_name": product.Name,
         "forecast": [result_forecast]

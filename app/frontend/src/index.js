@@ -1,7 +1,8 @@
 import './styles/style.scss';
- import {searchHelper,debounce} from './assets/search';
-import {getAllProducts,getProductDetails} from './api/api_request';
+import {searchHelper,debounce} from './assets/search';
+import {getAllProducts,getProductDetails,fetchProductForecast,fetchForecastGraph} from './api/api_request';
 import {createSearchArr} from './assets/chenge_data';
+import {productItem} from './Products'
 
 document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('searchInput');
@@ -9,26 +10,46 @@ document.addEventListener('DOMContentLoaded', () => {
   const faqItemsContainer = document.getElementById('faqItemsContainer');
   const faqItemTemplate = document.getElementById('faqItemTemplate');
   const suggestionsList = document.getElementById('suggestions');
+  const monthSelector = document.getElementById('monthSelector')
   let Product = []; 
 
-  const fetchItems = async (query) => {
-
-    getProductDetails('Product 1')
-      .then((data) =>{ 
-        console.log('POST Response:', data)
-      })
-      .catch((error) => console.error('Error:', error));
-
-    const mockData = [
-      { name: 'Product A', date: '2024-12-19', quantity: 10, price: 25 },
-      { name: 'Product B', date: '2024-11-15', quantity: 5, price: 15 },
-      { name: 'Product C', date: '2024-10-10', quantity: 20, price: 50 },
-    ];
-
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    return mockData.filter((item) => item.name.toLowerCase().includes(query.toLowerCase()));
-
+  const fetchItems = async (query, months_ahead) => {
+    try {
+      const data = await fetchProductForecast(query, months_ahead);
+      if (data) {
+        console.log(data.forecast);
+        const productItem_ = new productItem(
+          data.product_name,
+          data.product_price,
+          data.forecast[0].date,
+          data.forecast[0].quantity,
+          data.product_id
+        );
+        console.log(productItem_);
+        return productItem_; // Возвращаем созданный объект
+      }
+    } catch (error) {
+      console.log(error);
+      return null; // Возвращаем null в случае ошибки
+    }
   };
+
+    // const mockData = [
+    //   { name: 'Product A', date: '2024-12-19', quantity: 10, price: 25 },
+    //   { name: 'Product B', date: '2024-11-15', quantity: 5, price: 15 },
+    //   { name: 'Product C', date: '2024-10-10', quantity: 20, price: 50 },
+    // ];
+
+    // await new Promise((resolve) => setTimeout(resolve, 500));
+    // return mockData.filter((item) => item.name.toLowerCase().includes(query.toLowerCase()));
+
+  fetchProductForecast("Product 1", 1)
+  .then((data)=>{
+    console.log(data);
+  })
+  .catch((error)=>{
+    console.log(error);
+  })
 
   getAllProducts()
     .then((data) => {
@@ -46,27 +67,37 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('...');
     });
 
-  // getProductDetails('Product 1')
-  // .then((data) => console.log('POST Response:', data))
-  // .catch((error) => console.error('Error:', error));
 
-
-  const createFaqItem = (item) => {
-
-    const faqItem = faqItemTemplate.content.cloneNode(true);
-    faqItem.querySelector('.item-name').textContent = item.name;
-    faqItem.querySelector('.item-date').textContent = item.date;
-    faqItem.querySelector('.item-quantity').textContent = item.quantity;
-    faqItem.querySelector('.item-price').textContent = `$${item.price}`;
-
-    const expandBtn = faqItem.querySelector('.expand-btn');
-    const answer = faqItem.querySelector('.answer');
-    expandBtn.addEventListener('click', () => {
-      answer.classList.toggle('visible');
-    });
-
-    return faqItem;
-  };
+   
+    const createFaqItem = (item) => {
+      const faqItem = faqItemTemplate.content.cloneNode(true);
+      faqItem.querySelector('.item-name').textContent = item.name;
+      faqItem.querySelector('.item-date').textContent = item.date;
+      faqItem.querySelector('.item-quantity').textContent = item.quantity;
+      faqItem.querySelector('.item-price').textContent = `$${item.price}`;
+  
+      const expandBtn = faqItem.querySelector('.expand-btn');
+      const answer = faqItem.querySelector('.answer');
+  
+      expandBtn.addEventListener('click', async () => {
+        try {
+          const graphImage = document.getElementById('graph_image');
+          const imageUrl = await fetchForecastGraph(item.name, monthSelector.value);
+          if (imageUrl) {
+            console.log(imageUrl)
+            graphImage.src = imageUrl;
+            graphImage.alt = "График прогноза";
+          } else {
+            console.error("Ошибка загрузки графика");
+          }
+          answer.classList.toggle('visible');
+        } catch (error) {
+          console.error("Ошибка при обработке графика:", error);
+        }
+      });
+  
+      return faqItem;
+    };
 
 
   searchButton.addEventListener('click', async () => {
@@ -75,25 +106,27 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Введите текст для поиска!');
       return;
     }
-
-    if(faqItemsContainer.querySelector('.not-found-message')){
-      faqItemsContainer.querySelector('.not-found-message').remove()
+  
+    const notFoundMessage = faqItemsContainer.querySelector('.not-found-message');
+    if (notFoundMessage) {
+      notFoundMessage.remove();
     }
-
+  
     faqItemsContainer.insertAdjacentHTML('beforeend', '<p class="loading">Загрузка...</p>');
-    const items = await fetchItems(query);
-
+  
+    const item = await fetchItems(query, monthSelector.value);
+  
     const loadingIndicator = faqItemsContainer.querySelector('.loading');
     if (loadingIndicator) {
       loadingIndicator.remove();
     }
-
-    if (items.length > 0) {
-      items.forEach((item) => {
-        const faqItem = createFaqItem(item);
-        faqItemsContainer.appendChild(faqItem);
-      });
+  
+    if (item) {
+      console.log('Создаем элемент:', item);
+      const faqItem = createFaqItem(item);
+      faqItemsContainer.appendChild(faqItem);
     } else {
+      console.log('Товары не найдены.');
       const message = document.createElement('p');
       message.className = 'not-found-message';
       message.textContent = 'Товары не найдены.';
