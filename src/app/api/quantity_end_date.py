@@ -1,21 +1,11 @@
-import base64
-import json
-import os
-import pandas as pd
-from dateutil.relativedelta import relativedelta
-from fastapi import Form, Request, APIRouter, HTTPException
+from fastapi import Form, APIRouter, HTTPException
 from fastapi.params import Depends
-from fastapi.responses import FileResponse, JSONResponse
-from pathlib import Path
 from sqlalchemy.orm import Session
-from sqlalchemy.sql.functions import func
 
-from app.api.models.models import Products, Product
-from app.api.db_connection import get_db
-from app.product_quantity_forecast.quantity_forecast import Prognosis, Tovar
-from datetime import datetime, timedelta
-from app.product_quantity_forecast.grafik import plot_prognosis
-from shortage_date_prediction.shortage_date_prognosis import ShortagePrognosis, ProductShortage
+from src.app.api.models.models import Products
+from src.app.api.db_connection import get_db
+from src.app.product_quantity_forecast.grafik import plot_prognosis
+from src.shortage_date_prediction.shortage_date_prognosis import ShortagePrognosis, ProductShortage
 
 amount_router = APIRouter()
 

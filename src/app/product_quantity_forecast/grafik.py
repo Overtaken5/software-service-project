@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 from datetime import datetime
-from app.product_quantity_forecast.quantity_forecast import *
+from src.app.product_quantity_forecast.quantity_forecast import *
 
 def plot_prognosis(prognosis_json, start_date, end_date):
     print("Received prognosis_json:", prognosis_json)

@@ -5,8 +5,8 @@ import os
 from io import StringIO
 import json
 import matplotlib.pyplot as plt
-from app.product_quantity_forecast.quantity_forecast import Prognosis
-from app.product_quantity_forecast.grafik import plot_prognosis  # Импортируй модуль с функцией plot_prognosis
+from src.app.product_quantity_forecast.quantity_forecast import Prognosis
+from src.app.product_quantity_forecast.grafik import plot_prognosis  # Импортируй модуль с функцией plot_prognosis
 
 
 class TestPlotPrognosis(unittest.TestCase):

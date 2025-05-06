@@ -1,9 +1,7 @@
-import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.data_from_db import router
-from app.api.db_connection import auth
-from app.api.quantity_end_date import amount_router
+from src.app.api.data_from_db import router
+from src.app.api.db_connection import auth
 
 # Создаем приложение FastAPI
 app = FastAPI()

@@ -11,11 +11,11 @@ from pathlib import Path
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.functions import func
 
-from app.api.models.models import Products, Product
-from app.api.db_connection import get_db
-from app.product_quantity_forecast.quantity_forecast import Prognosis, Tovar
+from src.app.api.models.models import Products, Product
+from src.app.api.db_connection import get_db
+from src.app.product_quantity_forecast.quantity_forecast import Prognosis, Tovar
 from datetime import datetime, timedelta
-from app.product_quantity_forecast.grafik import plot_prognosis
+from src.app.product_quantity_forecast.grafik import plot_prognosis
 
 router = APIRouter()
 

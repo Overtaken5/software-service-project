@@ -1,12 +1,11 @@
 import pytest
 from fastapi.testclient import TestClient
-from app.api.main import app  # Предположим, что FastAPI-приложение и роутеры описаны в app.main
-from app.api.data_from_db import router
-from app.api.db_connection import get_db  # Путь до функции получения сессии БД
+from src.app.api.main import app  # Предположим, что FastAPI-приложение и роутеры описаны в app.main
+from src.app.api.db_connection import get_db  # Путь до функции получения сессии БД
 import jwt
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from app.api.models.models import Base
+from src.app.api.models.models import Base
 Users = None
 
 # Создаем тестовую базу данных (SQLite для примера)
